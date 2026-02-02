@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+opencv-python-headless
+numpy
+requests
+google-generativeai
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib
+# openai
+python-dotenv

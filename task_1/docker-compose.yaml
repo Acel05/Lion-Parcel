@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:13
+    container_name: lion_postgres
+    environment:
+      - POSTGRES_USER=lionuser
+      - POSTGRES_PASSWORD=lionpass
+      - POSTGRES_DB=lionparcel_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  airflow-webserver:
+    image: apache/airflow:2.7.0
+    container_name: lion_airflow_web
+    command: bash -c "airflow db init && airflow users create --username admin --firstname admin --lastname admin --role Admin --email admin@example.com --password admin && airflow webserver"
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://lionuser:lionpass@postgres/lionparcel_db
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
+  airflow-scheduler:
+    image: apache/airflow:2.7.0
+    container_name: lion_airflow_scheduler
+    command: scheduler
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://lionuser:lionpass@postgres/lionparcel_db
+    volumes:
+      - ./dags:/opt/airflow/dags
+    depends_on:
+      - postgres

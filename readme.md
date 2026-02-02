@@ -1,11 +1,11 @@
 # Lion Parcel Technical Test - Data Engineer
 
-Repositori ini berisi solusi untuk Tes Teknis Lion Parcel yang mencakup otomatisasi workflow (Airflow) dan pengembangan API (FastAPI + AI).
+Repositori ini berisi solusi lengkap untuk Tes Teknis Lion Parcel, mencakup otomatisasi workflow data (Airflow) dan pengembangan API analisis gambar berbasis AI (FastAPI + Gemini).
 
 ---
 
 ## Task 1: Airflow Workflow Automation
-**Deskripsi**: Sinkronisasi data transaksi retail dari skema `source` ke `warehouse` dengan metode Incremental Load dan penanganan Soft Delete.
+**Deskripsi**: Pipeline ETL untuk sinkronisasi data transaksi retail dari skema `source` ke `warehouse` menggunakan metode Incremental Load (filter 24 jam) dan penanganan Soft Delete.
 
 ### Cara Menjalankan:
 1. Masuk ke folder `task_1`.
@@ -46,6 +46,7 @@ Repositori ini berisi solusi untuk Tes Teknis Lion Parcel yang mencakup otomatis
    docker run -p 8000:8000 \
      -v "${PWD}/images:/app/images" \
      -v "${PWD}:/app/data" \
+     -v "${PWD}/service-account.json:/app/service-account.json" \
      --env-file .env \
      lion-parcel-api
 
